@@ -1,0 +1,136 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Login</h5>
+
+          <!-- Form-level error -->
+          <div
+            class="alert alert-danger alert-dismissible fade show"
+            role="alert"
+            *ngIf="errors['form']"
+          >
+            {{ errors["form"] }}
+            <button
+              type="button"
+              class="btn-close"
+              (click)="errors['form'] = null"
+            ></button>
+          </div>
+
+          <form #loginForm="ngForm" (ngSubmit)="onSubmit()" novalidate>
+            <!-- Email Field -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address *</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                [(ngModel)]="email"
+                placeholder="Enter your email"
+                (blur)="onFieldBlur('email')"
+                (change)="validateEmail()"
+                required
+                class="form-control"
+                [class.is-invalid]="touched['email'] && errors['email']"
+                [class.is-valid]="touched['email'] && !errors['email'] && email"
+              />
+              <div class="invalid-feedback d-block" *ngIf="errors['email']">
+                <i class="bi bi-exclamation-circle"></i> {{ errors["email"] }}
+              </div>
+              <div
+                class="valid-feedback d-block"
+                *ngIf="touched['email'] && !errors['email'] && email"
+              >
+                <i class="bi bi-check-circle"></i> Email is valid
+              </div>
+              <small class="form-text text-muted">
+                We'll never share your email.
+              </small>
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Password *</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                [(ngModel)]="password"
+                placeholder="Enter your password"
+                (blur)="onFieldBlur('password')"
+                (change)="validatePassword()"
+                required
+                class="form-control"
+                [class.is-invalid]="touched['password'] && errors['password']"
+                [class.is-valid]="
+                  touched['password'] && !errors['password'] && password
+                "
+              />
+              <div class="invalid-feedback d-block" *ngIf="errors['password']">
+                <i class="bi bi-exclamation-circle"></i>
+                {{ errors["password"] }}
+              </div>
+              <div
+                class="valid-feedback d-block"
+                *ngIf="touched['password'] && !errors['password'] && password"
+              >
+                <i class="bi bi-check-circle"></i> Password is valid
+              </div>
+              <small class="form-text text-muted">
+                Minimum 6 characters required.
+              </small>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              class="btn btn-danger w-100 mb-2"
+              [disabled]="!isFormValid() || isSubmitting"
+            >
+              <span *ngIf="!isSubmitting">Login</span>
+              <span *ngIf="isSubmitting">
+                <span
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Logging in...
+              </span>
+            </button>
+
+            <!-- Reset Button -->
+            <button
+              type="button"
+              class="btn btn-secondary w-100"
+              (click)="resetForm()"
+              [disabled]="isSubmitting"
+            >
+              Clear Form
+            </button>
+          </form>
+
+          <!-- Password and Registration Links -->
+          <hr class="my-3" />
+          <div class="text-center">
+            <p class="mb-2">
+              <a routerLink="/forgot-password" class="text-danger fw-bold"
+                >Forgot your password?</a
+              >
+            </p>
+            <p class="mb-0">
+              Don't have an account?
+              <a routerLink="/register" class="text-danger fw-bold"
+                >Register here</a
+              >
+            </p>
+          </div>
+          <p class="text-center text-muted small">
+            <a href="#">Forgot your password?</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

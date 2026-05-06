@@ -1,0 +1,305 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Create Account</h5>
+          <p class="text-muted mb-4">Join our dating community today</p>
+
+          <!-- Success Alert -->
+          <div
+            class="alert alert-success alert-dismissible fade show"
+            role="alert"
+            *ngIf="showSuccessAlert"
+          >
+            <i class="bi bi-check-circle me-2"></i>
+            {{ successMessage }}
+            <button
+              type="button"
+              class="btn-close"
+              (click)="closeAlert('success')"
+            ></button>
+          </div>
+
+          <!-- Form-level Error -->
+          <div
+            class="alert alert-danger alert-dismissible fade show"
+            role="alert"
+            *ngIf="errors['form']"
+          >
+            <i class="bi bi-exclamation-circle me-2"></i>
+            {{ errors["form"] }}
+            <button
+              type="button"
+              class="btn-close"
+              (click)="closeAlert('error')"
+            ></button>
+          </div>
+
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate>
+            <!-- First Name Field -->
+            <div class="mb-3">
+              <label for="firstName" class="form-label">First Name *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="firstName"
+                formControlName="firstName"
+                placeholder="Enter your first name"
+                (blur)="onFieldBlur('firstName')"
+                (change)="onFieldChange('firstName')"
+                [class.is-invalid]="touched['firstName'] && errors['firstName']"
+                [class.is-valid]="
+                  touched['firstName'] &&
+                  !errors['firstName'] &&
+                  registerForm.get('firstName')?.value
+                "
+                [disabled]="isSubmitting"
+              />
+              <div class="invalid-feedback d-block" *ngIf="errors['firstName']">
+                <i class="bi bi-exclamation-circle"></i>
+                {{ errors["firstName"] }}
+              </div>
+              <div
+                class="valid-feedback d-block"
+                *ngIf="
+                  touched['firstName'] &&
+                  !errors['firstName'] &&
+                  registerForm.get('firstName')?.value
+                "
+              >
+                <i class="bi bi-check-circle"></i> First name is valid
+              </div>
+            </div>
+
+            <!-- Last Name Field -->
+            <div class="mb-3">
+              <label for="lastName" class="form-label">Last Name *</label>
+              <input
+                type="text"
+                class="form-control"
+                id="lastName"
+                formControlName="lastName"
+                placeholder="Enter your last name"
+                (blur)="onFieldBlur('lastName')"
+                (change)="onFieldChange('lastName')"
+                [class.is-invalid]="touched['lastName'] && errors['lastName']"
+                [class.is-valid]="
+                  touched['lastName'] &&
+                  !errors['lastName'] &&
+                  registerForm.get('lastName')?.value
+                "
+                [disabled]="isSubmitting"
+              />
+              <div class="invalid-feedback d-block" *ngIf="errors['lastName']">
+                <i class="bi bi-exclamation-circle"></i>
+                {{ errors["lastName"] }}
+              </div>
+              <div
+                class="valid-feedback d-block"
+                *ngIf="
+                  touched['lastName'] &&
+                  !errors['lastName'] &&
+                  registerForm.get('lastName')?.value
+                "
+              >
+                <i class="bi bi-check-circle"></i> Last name is valid
+              </div>
+            </div>
+
+            <!-- Email Field -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email Address *</label>
+              <input
+                type="email"
+                class="form-control"
+                id="email"
+                formControlName="email"
+                placeholder="Enter your email (e.g., user@example.com)"
+                (blur)="onFieldBlur('email')"
+                (change)="onFieldChange('email')"
+                [class.is-invalid]="touched['email'] && errors['email']"
+                [class.is-valid]="
+                  touched['email'] &&
+                  !errors['email'] &&
+                  registerForm.get('email')?.value
+                "
+                [disabled]="isSubmitting"
+              />
+              <div class="invalid-feedback d-block" *ngIf="errors['email']">
+                <i class="bi bi-exclamation-circle"></i> {{ errors["email"] }}
+              </div>
+              <div
+                class="valid-feedback d-block"
+                *ngIf="
+                  touched['email'] &&
+                  !errors['email'] &&
+                  registerForm.get('email')?.value
+                "
+              >
+                <i class="bi bi-check-circle"></i> Email is valid
+              </div>
+              <small class="form-text text-muted">
+                We'll never share your email with anyone.
+              </small>
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-3">
+              <label for="password" class="form-label">Password *</label>
+              <div class="input-group">
+                <input
+                  [type]="showPassword ? 'text' : 'password'"
+                  class="form-control"
+                  id="password"
+                  formControlName="password"
+                  placeholder="Enter a strong password"
+                  (blur)="onFieldBlur('password')"
+                  (change)="onFieldChange('password')"
+                  [class.is-invalid]="touched['password'] && errors['password']"
+                  [class.is-valid]="
+                    touched['password'] &&
+                    !errors['password'] &&
+                    registerForm.get('password')?.value
+                  "
+                  [disabled]="isSubmitting"
+                />
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  (click)="togglePasswordVisibility()"
+                  [disabled]="isSubmitting"
+                >
+                  <i
+                    [class]="'bi ' + (showPassword ? 'bi-eye-slash' : 'bi-eye')"
+                  ></i>
+                </button>
+              </div>
+              <div class="invalid-feedback d-block" *ngIf="errors['password']">
+                <i class="bi bi-exclamation-circle"></i>
+                {{ errors["password"] }}
+              </div>
+              <div
+                class="valid-feedback d-block"
+                *ngIf="
+                  touched['password'] &&
+                  !errors['password'] &&
+                  registerForm.get('password')?.value
+                "
+              >
+                <i class="bi bi-check-circle"></i> Password is valid
+              </div>
+              <small class="form-text text-muted d-block mt-1">
+                Must be 6-50 characters long.
+              </small>
+            </div>
+
+            <!-- Confirm Password Field -->
+            <div class="mb-3">
+              <label for="confirmPassword" class="form-label"
+                >Confirm Password *</label
+              >
+              <div class="input-group">
+                <input
+                  [type]="showConfirmPassword ? 'text' : 'password'"
+                  class="form-control"
+                  id="confirmPassword"
+                  formControlName="confirmPassword"
+                  placeholder="Confirm your password"
+                  (blur)="onFieldBlur('confirmPassword')"
+                  (change)="onFieldChange('confirmPassword')"
+                  [class.is-invalid]="
+                    touched['confirmPassword'] && errors['confirmPassword']
+                  "
+                  [class.is-valid]="
+                    touched['confirmPassword'] &&
+                    !errors['confirmPassword'] &&
+                    registerForm.get('confirmPassword')?.value &&
+                    !registerForm.hasError('passwordMismatch')
+                  "
+                  [disabled]="isSubmitting"
+                />
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  (click)="toggleConfirmPasswordVisibility()"
+                  [disabled]="isSubmitting"
+                >
+                  <i
+                    [class]="
+                      'bi ' + (showConfirmPassword ? 'bi-eye-slash' : 'bi-eye')
+                    "
+                  ></i>
+                </button>
+              </div>
+              <div
+                class="invalid-feedback d-block"
+                *ngIf="errors['confirmPassword']"
+              >
+                <i class="bi bi-exclamation-circle"></i>
+                {{ errors["confirmPassword"] }}
+              </div>
+              <div
+                class="valid-feedback d-block"
+                *ngIf="
+                  touched['confirmPassword'] &&
+                  !errors['confirmPassword'] &&
+                  registerForm.get('confirmPassword')?.value &&
+                  !registerForm.hasError('passwordMismatch')
+                "
+              >
+                <i class="bi bi-check-circle"></i> Passwords match
+              </div>
+            </div>
+
+            <!-- Password Requirements Info Box -->
+            <div class="alert alert-info mb-3" role="alert">
+              <small>
+                <i class="bi bi-info-circle me-1"></i>
+                <strong>Password Requirements:</strong>
+                <ul class="mb-0 mt-2">
+                  <li>Between 6 and 50 characters</li>
+                  <li>Must match your confirmation password</li>
+                </ul>
+              </small>
+            </div>
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              class="btn btn-danger w-100 mb-2"
+              [disabled]="!isFormValid() || isSubmitting"
+            >
+              <span *ngIf="!isSubmitting">Create Account</span>
+              <span *ngIf="isSubmitting">
+                <span
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Creating Account...
+              </span>
+            </button>
+
+            <!-- Clear Form Button -->
+            <button
+              type="button"
+              class="btn btn-outline-secondary w-100"
+              (click)="resetForm()"
+              [disabled]="isSubmitting"
+            >
+              Clear Form
+            </button>
+          </form>
+
+          <!-- Login Link -->
+          <hr class="my-3" />
+          <p class="text-center mb-0">
+            Already have an account?
+            <a routerLink="/login" class="text-danger fw-bold">Login here</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
