@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../models';
 
 interface ValidationError {
@@ -26,7 +28,10 @@ export class LoginComponent implements OnInit {
     private readonly minPasswordLength = 6;
     private readonly maxPasswordLength = 50;
 
-    constructor() { }
+    constructor(
+        private authService: AuthService,
+        private router: Router
+    ) { }
 
     ngOnInit(): void {
         this.clearErrors();
@@ -124,25 +129,17 @@ export class LoginComponent implements OnInit {
             password: this.password
         };
 
-        console.log('Login form submitted', loginData);
-        // TODO: Call authentication service to submit login
-        // this.authService.login(loginData).subscribe(
-        //     (response) => {
-        //         console.log('Login successful', response);
-        //         this.resetForm();
-        //         // Navigate to dashboard
-        //     },
-        //     (error) => {
-        //         this.isSubmitting = false;
-        //         this.errors['form'] = error.message || 'Login failed. Please try again.';
-        //     }
-        // );
-
-        // Simulate API response
-        setTimeout(() => {
-            this.isSubmitting = false;
-            alert('Login form validated successfully!');
-        }, 1500);
+        this.authService.login(loginData).subscribe(
+            (response) => {
+                console.log('Login successful', response);
+                this.resetForm();
+                this.router.navigate(['/']);
+            },
+            (error) => {
+                this.isSubmitting = false;
+                this.errors['form'] = error.message || 'Login failed. Please try again.';
+            }
+        );
     }
 
 }

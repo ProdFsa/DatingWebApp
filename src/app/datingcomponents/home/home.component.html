@@ -1,12 +1,84 @@
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-12">
-      <h1>Welcome to Dating App</h1>
-      <p class="lead">Find your perfect match today!</p>
-      <p>
-        Explore profiles, connect with potential matches, and start meaningful
-        conversations.
+      <h1 class="text-center mb-4">Welcome to Dating App</h1>
+      <p class="text-center lead mb-5">
+        Find your perfect match today! Discover people who share your interests.
       </p>
+    </div>
+  </div>
+
+  <!-- Current User Info -->
+  <div class="row mb-4" *ngIf="currentUser">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body text-center">
+          <h5 class="card-title">Welcome back, {{ currentUser.firstName }}!</h5>
+          <p class="card-text">Ready to find your next match?</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Potential Matches -->
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="mb-4">Discover People</h2>
+
+      <div *ngIf="isLoading" class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+
+      <div
+        *ngIf="!isLoading && potentialMatches.length === 0"
+        class="text-center"
+      >
+        <p class="text-muted">
+          No more potential matches right now. Check back later!
+        </p>
+      </div>
+
+      <div class="row" *ngIf="!isLoading && potentialMatches.length > 0">
+        <div class="col-md-4 mb-4" *ngFor="let match of potentialMatches">
+          <div class="card h-100">
+            <img
+              [src]="match.avatar"
+              class="card-img-top"
+              alt="{{ match.firstName }} {{ match.lastName }}"
+              style="height: 200px; object-fit: cover"
+            />
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">
+                {{ match.firstName }} {{ match.lastName }}, {{ match.age }}
+              </h5>
+              <p class="card-text">{{ match.bio }}</p>
+              <div class="mt-auto">
+                <div
+                  class="mb-2"
+                  *ngIf="match.interests && match.interests.length > 0"
+                >
+                  <small class="text-muted"
+                    >Interests: {{ match.interests.join(", ") }}</small
+                  >
+                </div>
+                <div class="d-flex justify-content-between">
+                  <button
+                    class="btn btn-outline-danger me-2"
+                    (click)="passMatch(match)"
+                  >
+                    <i class="fas fa-times"></i> Pass
+                  </button>
+                  <button class="btn btn-danger" (click)="likeMatch(match)">
+                    <i class="fas fa-heart"></i> Like
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

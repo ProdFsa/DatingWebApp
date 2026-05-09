@@ -7,7 +7,8 @@ export interface Match {
     avatar?: string;
     bio?: string;
     interests?: string[];
-    matchedDate: Date;
+    matchDate: Date;
+    compatibility: number;
     isLiked?: boolean;
 }
 

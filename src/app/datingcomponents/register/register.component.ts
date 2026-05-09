@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { RegisterRequest } from '../../models';
 import { CustomValidators } from '../../validators/custom.validators';
 import { LocalStorageService } from '../../services/local-storage.service';
+import { AuthService } from '../../services/auth.service';
 
 interface FieldError {
     [key: string]: string | null;
@@ -34,6 +35,7 @@ export class RegisterComponent implements OnInit {
     constructor(
         private fb: FormBuilder,
         private localStorageService: LocalStorageService,
+        private authService: AuthService,
         private router: Router
     ) {
         this.registerForm = this.fb.group(
@@ -256,23 +258,18 @@ export class RegisterComponent implements OnInit {
 
         this.isSubmitting = true;
 
-        // Simulate API call delay
-        setTimeout(() => {
-            try {
-                const registerData: RegisterRequest = {
-                    firstName: this.registerForm.get('firstName')?.value.trim(),
-                    lastName: this.registerForm.get('lastName')?.value.trim(),
-                    email: this.registerForm.get('email')?.value.trim().toLowerCase(),
-                    password: this.registerForm.get('password')?.value,
-                    confirmPassword: this.registerForm.get('confirmPassword')?.value
-                };
+        const registerData: RegisterRequest = {
+            firstName: this.registerForm.get('firstName')?.value.trim(),
+            lastName: this.registerForm.get('lastName')?.value.trim(),
+            email: this.registerForm.get('email')?.value.trim().toLowerCase(),
+            password: this.registerForm.get('password')?.value,
+            confirmPassword: this.registerForm.get('confirmPassword')?.value
+        };
 
-                // Save to local storage
-                this.localStorageService.setItem('pendingRegistration', registerData);
-                this.localStorageService.setItem('registrationTimestamp', new Date().toISOString());
-
+        this.authService.register(registerData).subscribe(
+            (response) => {
                 this.isSubmitting = false;
-                this.successMessage = 'Registration successful! Your data has been saved. Redirecting to login...';
+                this.successMessage = response.message || 'Registration successful! Please login with your credentials.';
                 this.showSuccessAlert = true;
 
                 // Reset form
@@ -282,12 +279,13 @@ export class RegisterComponent implements OnInit {
                 setTimeout(() => {
                     this.router.navigate(['/login']);
                 }, 3000);
-            } catch (error) {
+            },
+            (error) => {
                 this.isSubmitting = false;
                 console.error('Registration error:', error);
-                this.errors['form'] = 'An error occurred during registration. Please try again.';
+                this.errors['form'] = error.message || 'Registration failed. Please try again.';
             }
-        }, 1000);
+        );
     }
 
     /**

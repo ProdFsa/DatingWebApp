@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessagesComponent } from './messages.component';
 import { MessagesRoutingModule } from './messages-routing.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -9,7 +10,8 @@ import { MessagesRoutingModule } from './messages-routing.module';
     ],
     imports: [
         CommonModule,
-        MessagesRoutingModule
+        MessagesRoutingModule,
+        FormsModule
     ]
 })
 export class MessagesModule { }
