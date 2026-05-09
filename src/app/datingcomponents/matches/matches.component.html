@@ -1,0 +1,100 @@
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="mb-4">Your Matches</h1>
+      <p class="text-muted mb-4">
+        Connect with people who are interested in you!
+      </p>
+
+      <!-- Error Message -->
+      <div
+        *ngIf="errorMessage"
+        class="alert alert-danger alert-dismissible fade show"
+        role="alert"
+      >
+        {{ errorMessage }}
+        <button
+          type="button"
+          class="btn-close"
+          (click)="errorMessage = ''"
+        ></button>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="text-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading matches...</span>
+        </div>
+      </div>
+
+      <!-- No Matches -->
+      <div *ngIf="!isLoading && matches.length === 0" class="text-center">
+        <div class="card">
+          <div class="card-body">
+            <i class="fas fa-heart-broken fa-3x text-muted mb-3"></i>
+            <h5 class="card-title">No matches yet</h5>
+            <p class="card-text">Keep swiping to find your perfect match!</p>
+            <a routerLink="/" class="btn btn-danger">Start Matching</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matches Grid -->
+      <div class="row" *ngIf="!isLoading && matches.length > 0">
+        <div class="col-md-4 mb-4" *ngFor="let match of matches">
+          <div class="card h-100">
+            <div
+              class="card-header d-flex justify-content-between align-items-center"
+            >
+              <span class="badge bg-success"
+                >{{ match.compatibility }}% Match</span
+              >
+              <small class="text-muted">{{
+                match.matchDate | date: "short"
+              }}</small>
+            </div>
+            <img
+              [src]="match.avatar"
+              class="card-img-top"
+              alt="{{ match.firstName }} {{ match.lastName }}"
+              style="height: 200px; object-fit: cover"
+            />
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">
+                {{ match.firstName }} {{ match.lastName }}, {{ match.age }}
+              </h5>
+              <p class="card-text">{{ match.bio }}</p>
+              <div class="mt-auto">
+                <div
+                  class="mb-2"
+                  *ngIf="match.interests && match.interests.length > 0"
+                >
+                  <small class="text-muted"
+                    >Interests: {{ match.interests.join(", ") }}</small
+                  >
+                </div>
+                <div class="d-flex justify-content-between">
+                  <button
+                    class="btn btn-outline-danger me-2"
+                    (click)="passMatch(match)"
+                  >
+                    <i class="fas fa-times"></i> Pass
+                  </button>
+                  <button class="btn btn-danger" (click)="likeMatch(match)">
+                    <i class="fas fa-heart"></i> Like
+                  </button>
+                </div>
+                <button
+                  class="btn btn-outline-secondary btn-sm w-100 mt-2"
+                  (click)="unmatch(match)"
+                >
+                  <i class="fas fa-user-times"></i> Unmatch
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
